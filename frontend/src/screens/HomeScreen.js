@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer } from "react";
 import axios from "axios";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -6,7 +6,8 @@ import Product from "../components/Product";
 import { Helmet } from "react-helmet-async";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
-// import data from '../data';
+import Slider from "../components/slider";
+
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -27,7 +28,7 @@ function HomeScreen() {
     loading: true,
     error: "",
   });
-  // const [products, setProducts] = useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
       dispatch({ type: "FETCH_REQUEST" });
@@ -37,17 +38,29 @@ function HomeScreen() {
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: err.message });
       }
-
-      // setProducts(result.data);
     };
     fetchData();
   }, []);
+
+  // Function to handle smooth scrolling
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <div>
       <Helmet>
         <title>Amazona</title>
       </Helmet>
-      <h1>Featured Products</h1>
+
+      <Slider />
+
+      <h1 className="scroll-to-top" onClick={scrollToTop}>
+        Featured Products
+      </h1>
       <div className="products">
         {loading ? (
           <LoadingBox />
@@ -66,4 +79,5 @@ function HomeScreen() {
     </div>
   );
 }
+
 export default HomeScreen;

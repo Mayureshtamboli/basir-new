@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import mg from 'mailgun-js';
+import nodemailer from 'nodemailer'; // Add this line
 
 export const baseUrl = () =>
   process.env.BASE_URL
@@ -47,6 +48,14 @@ export const isAdmin = (req, res, next) => {
     res.status(401).send({ message: 'Invalid Admin Token' });
   }
 };
+
+export const nodemailerTransporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USERNAME,
+    pass: process.env.EMAIL_PASSWORD,
+  },
+});
 
 export const mailgun = () =>
   mg({

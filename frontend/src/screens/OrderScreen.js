@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useContext, useEffect, useReducer } from 'react';
+import React, { useContext, useEffect, useReducer, } from 'react';
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -29,6 +29,7 @@ function reducer(state, action) {
       return { ...state, loadingPay: false, successPay: true };
     case 'PAY_FAIL':
       return { ...state, loadingPay: false };
+      
     case 'PAY_RESET':
       return { ...state, loadingPay: false, successPay: false };
 
@@ -48,14 +49,13 @@ function reducer(state, action) {
       return state;
   }
 }
+
 export default function OrderScreen() {
   const { state } = useContext(Store);
   const { userInfo } = state;
-
   const params = useParams();
   const { id: orderId } = params;
   const navigate = useNavigate();
-
   const [
     {
       loading,
@@ -74,45 +74,7 @@ export default function OrderScreen() {
     successPay: false,
     loadingPay: false,
   });
-
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
-
-  function createOrder(data, actions) {
-    return actions.order
-      .create({
-        purchase_units: [
-          {
-            amount: { value: order.totalPrice },
-          },
-        ],
-      })
-      .then((orderID) => {
-        return orderID;
-      });
-  }
-
-  function onApprove(data, actions) {
-    return actions.order.capture().then(async function (details) {
-      try {
-        dispatch({ type: 'PAY_REQUEST' });
-        const { data } = await axios.put(
-          `/api/orders/${order._id}/pay`,
-          details,
-          {
-            headers: { authorization: `Bearer ${userInfo.token}` },
-          }
-        );
-        dispatch({ type: 'PAY_SUCCESS', payload: data });
-        toast.success('Order is paid');
-      } catch (err) {
-        dispatch({ type: 'PAY_FAIL', payload: getError(err) });
-        toast.error(getError(err));
-      }
-    });
-  }
-  function onError(err) {
-    toast.error(getError(err));
-  }
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -187,6 +149,67 @@ export default function OrderScreen() {
     }
   }
 
+  const payWithPhonePe = async (e) => {
+    e.preventDefault();
+    try {
+      const data = {
+        name: order.shippingAddress.fullName,
+        amount: order.totalPrice,
+        number: '7498608775',
+        MUID: "MUID" + Date.now(),
+        transactionId: 'T' + Date.now(),
+      };
+      // Make a POST request to the /api/payment endpoint
+      const response = await axios.post('/api/payment', { ...data });
+      // Extract the redirected URL from the response headers
+      const redirectedUrl = response.headers.location;
+      // Redirect the user to the fetched redirected URL
+      window.location.href = redirectedUrl;
+    } catch (error) {
+      console.error('Error paying with PhonePe:', error);
+      // Handle the error if needed
+    }
+  };
+  
+
+  function createOrder(data, actions) {
+    return actions.order
+      .create({
+        purchase_units: [
+          {
+            amount: { value: order.totalPrice },
+          },
+        ],
+      })
+      .then((orderID) => {
+        return orderID;
+      });
+  }
+
+  function onApprove(data, actions) {
+    return actions.order.capture().then(async function (details) {
+      try {
+        dispatch({ type: 'PAY_REQUEST' });
+        const { data } = await axios.put(
+          `/api/orders/${order._id}/pay`,
+          details,
+          {
+            headers: { authorization: `Bearer ${userInfo.token}` },
+          }
+        );
+        dispatch({ type: 'PAY_SUCCESS', payload: data });
+        toast.success('Order is paid');
+      } catch (err) {
+        dispatch({ type: 'PAY_FAIL', payload: getError(err) });
+        toast.error(getError(err));
+      }
+    });
+  }
+
+  function onError(err) {
+    toast.error(getError(err));
+  }
+
   return loading ? (
     <LoadingBox></LoadingBox>
   ) : error ? (
@@ -204,19 +227,7 @@ export default function OrderScreen() {
               <Card.Title>Shipping</Card.Title>
               <Card.Text>
                 <strong>Name:</strong> {order.shippingAddress.fullName} <br />
-                <strong>Address: </strong> {order.shippingAddress.address},
-                {order.shippingAddress.city}, {order.shippingAddress.postalCode}
-                ,{order.shippingAddress.country}
-                &nbsp;
-                {order.shippingAddress.location &&
-                  order.shippingAddress.location.lat && (
-                    <a
-                      target="_new"
-                      href={`https://maps.google.com?q=${order.shippingAddress.location.lat},${order.shippingAddress.location.lng}`}
-                    >
-                      Show On Map
-                    </a>
-                  )}
+                <strong>Address: </strong> {order.shippingAddress.address}
               </Card.Text>
               {order.isDelivered ? (
                 <MessageBox variant="success">
@@ -304,20 +315,26 @@ export default function OrderScreen() {
                 </ListGroup.Item>
                 {!order.isPaid && (
                   <ListGroup.Item>
+                    {/* PayPal Buttons */}
                     {isPending ? (
                       <LoadingBox />
                     ) : (
-                      <div>
-                        <PayPalButtons
-                          createOrder={createOrder}
-                          onApprove={onApprove}
-                          onError={onError}
-                        ></PayPalButtons>
-                      </div>
+                      <PayPalButtons
+                        createOrder={createOrder}
+                        onApprove={onApprove}
+                        onError={onError}
+                      ></PayPalButtons>
                     )}
                     {loadingPay && <LoadingBox></LoadingBox>}
                   </ListGroup.Item>
                 )}
+                {/* PhonePe Button */}
+                <ListGroup.Item>
+                  <Button type="button" onClick={payWithPhonePe}>
+                    Pay with PhonePe
+                  </Button>
+                </ListGroup.Item>
+                {/* Admin action: Deliver Order */}
                 {userInfo.isAdmin && order.isPaid && !order.isDelivered && (
                   <ListGroup.Item>
                     {loadingDeliver && <LoadingBox></LoadingBox>}

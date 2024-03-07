@@ -1,22 +1,41 @@
+/* Import Montserrat font with Alternates */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Montserrat+Alternates&display=swap');
+
+/* Apply Montserrat Alternates font to specific elements */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat Alternates', sans-serif;
+  /* Add other styles as needed */
+}
+
+/* Apply Montserrat font for other elements */
+body, p, a, button, input {
+  font-family: 'Montserrat', sans-serif;
+  /* Add other styles as needed */
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Montserrat', sans-serif; /* Fallback font */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #ffffff;
+  
 }
+
 .site-container {
   min-height: 100vh;
 }
+
 main {
   flex: 1;
 }
+
 .btn-primary,
 .btn-outline-primary {
   background-color: #f0c040;
-  color: #000000;
+  color: #ffffff;
 }
+
 .products {
   display: flex;
   flex-wrap: wrap;
@@ -24,26 +43,41 @@ main {
 }
 
 .rating span {
-  color: #ffc000;
+  color: #3cc88e;
 }
 
 .product {
   border: 1px #404040 solid;
   margin: 1rem;
 }
+
 .product img {
   width: 100%;
   max-width: 400px;
 }
+
 .product-info {
-  padding: 1rem;
+  padding: 3rem;
 }
+
 .img-large {
   max-width: 100%;
 }
+
+.my-3 {
+  width: 100%;
+}
+
+h2 {
+
+  font-size: 25px;
+  color: darkslategray;
+}
+
 .img-thumbnail {
   height: 80px;
 }
+
 .small-container {
   max-width: 600px;
 }
@@ -52,6 +86,7 @@ main {
   border-bottom: 0.2rem solid #a0a0a0;
   color: #a0a0a0;
 }
+
 .checkout-steps > div.active {
   border-bottom: 0.2rem solid #f08000;
   color: #f08000;
@@ -59,40 +94,51 @@ main {
 
 /* sidebar */
 .navbar-brand {
-  font-weight: bold;
+  font-weight: var(--bs-btn-border-color);
 }
+
 .side-navbar {
   width: 240px;
   height: 100%;
   position: absolute;
   left: -300px;
-  background-color: #100901;
+  background-color: #ffffff;
   transition: 0.5s;
+  font-weight: var(--bs-btn-border-color);
+}
+
+strong {
+  color: black;
+  font-weight: var(--bs-btn-border-color);
 }
 
 .site-container {
   transition: 0.4s;
 }
+
 .active-cont {
   margin-left: 240px;
 }
+
 .active-nav {
   left: 0;
 }
+
 .text-bold {
-  font-weight: bold;
+  font-weight: 0px;
 }
 
 /* Map */
-
 .full-box {
   height: 100vh;
   max-width: initial;
 }
+
 .full-box header,
 .full-box footer {
   display: none;
 }
+
 .full-box .container {
   height: 100vh;
   max-width: initial;
@@ -114,14 +160,416 @@ main {
   height: 3rem;
   display: flex;
 }
+
 .map-input-box input {
   border-radius: 1rem 0 0 1rem;
   border-right: 0;
 }
+
 .map-input-box button {
   border-radius: 0 1rem 1rem 0;
   border-left: 0;
 }
+
 button.thumbnail {
+  padding: 1px;
+  width: fit-content;
+}
+
+/* Main container for the slider */
+.slider-container {
+  position: relative;
+  overflow: hidden;
+  height: 400px; /* Set default height for desktop */
+  margin-left: 0%;
+  margin-right: 0%;
+  box-shadow: 3px 6px 9px rgb(205, 200, 156); /* Add shadow effect */
+  border-radius: 0px; /* Adjust the value to control the amount of curvature */
+}
+
+/* Individual slides */
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  border-radius: 0px; /* Adjust the value to control the amount of curvature */
+  overflow: hidden;
+  margin: 0%;
+  box-shadow: 3px 6px 9px rgb(205, 200, 156); /* Add shadow effect */
+  
+}
+
+/* Show the first slide initially */
+.slide.active {
+  opacity: 1;
+  
+}
+
+/* Optional: Navigation buttons */
+.slider-nav {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.slider-nav button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 50px;
+  margin: 0 10px;
+  color: #80868b;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+  /* Adjust height and font size for mobile devices */
+  .slider-container {
+    height: 400px;
+  }
+
+  .slide img {
+    width: 100%; /* Ensure images fill the container */
+    height: 100%; /* Ensure images fill the container */
+  }
+
+  .slider-nav button {
+    font-size: 18px;
+  }
+}
+
+.scroll-to-top {
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.scroll-to-top:hover {
+  opacity: 0.7;
+}
+
+.card {
+  width: 100%; /* Adjust the width as needed */
+  margin-bottom: 20px;
+  border: none;
+  box-shadow: 3px 6px 9px rgb(205, 200, 156); /* Add shadow effect */
+}
+
+
+.thumbnail.btn.btn-light {
+  width: fit-content;
+  height: fit-content;
+  
+}
+
+.card-img-top {
+  height: 100%; /* Adjust the height of the image */
+  width: 100%;
+  object-fit: cover;
+  padding: 12px;
+  
+}
+
+.card-body {
+  padding: 10px;
+  color: #000000;
+}
+
+.card-title {
+  font-size: 15px;
+  margin-bottom: 10px;
+  color: #000000; /* Change the color to your desired color value */
+}
+
+a {
+  text-decoration: none; /* Remove underline from links within .card-title */
+  font-family: 'Montserrat', sans-serif; /* Apply Montserrat font */
+  font-size: 18px; /* Adjust font size as needed */
+  font-weight: 400; /* Use normal font weight */
+  color: #000000; /* Set the desired color */
+}
+
+header {
+  background-color: #ffffff; /* Black */
+  color: #ffffff; /* White text */
+  box-shadow: 3px 6px 9px rgb(205, 200, 156);
+}
+
+.navbar {
+  background-color: #00000000; /* Black */
+  color: #000000; /* White text */
+  --bs-navbar-padding-x: none;
+
+}
+
+.navbar-brand {
+  color: #000000; /* White text */
+  font-size: 30px;
+  font-weight: 200;
+}
+
+.navbar-brand:focus,
+.navbar-brand:hover {
+  color: #605e5efe;
+}
+
+.scroll-to-top {
+  font-size: 15px;
+}
+
+.card-text {
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+.btn {
+  border-style: solid;
+  border-color: #e2e6ea;
+}
+
+.btn-light {
+  background-color: #f8f9fa; /* Light grey */
+  color: #000;
+}
+
+.btn-light:hover {
+  background-color: #e2e6ea; /* Light grey - darker shade */
+}
+
+.btn-light:disabled {
+  background-color: #f8f9fa; /* Light grey */
+  color: #6c757d; /* Grey */
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background-color: #000000; /* Blue */
+  --bs-btn-hover-border-color: #ffffff;
+  box-shadow: 3px 6px 9px rgb(205, 200, 156);
+}
+
+.btn-primary:hover {
+  background-color: #110c5e; /* Darker blue */
+  
+}
+
+.btn-outline-primary {
+  --bs-btn-color: #0d6efd;
+  --bs-btn-border-color: #0d6efd00;
+}
+
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-weight: lighter;
+  line-height: 1.2;
+  font-size: 20px;
+
+}
+
+.scroll-to-top {
+  font-size: 30px;
+  font-weight: 10;
+  
+}
+::-webkit-scrollbar {
+  display: none;
+}
+.registration-form-container {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.form-heading {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.registration-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="file"],
+select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.submit-btn {
+  width: 50%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background-color: #0056b3;
+}
+/* ProductForm.css */
+.product-form-container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 50px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  
+}
+
+
+.product-form {
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  font-weight: 0;
+  font-size: 20px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 80px;
+  font-size: 10px;
+  box-sizing: border-box;
+}
+
+.submit-btn {
+  background-color: #007bff;
+  width: 100%;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 200px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: #0056b3;
+}
+input[type="file" i] {
+  border-radius: 200px;
+}
+/* ProductForm.css */
+.file-input {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.file-input input[type="file"] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
   padding: 0;
+  font-size: 20px; /* Adjust font size as needed */
+  cursor: pointer;
+  opacity: 0;
+}
+
+.file-input-label {
+  display: inline-block;
+  background-color: #007bff; /* Button background color */
+  color: white; /* Button text color */
+  padding: 10px 20px; /* Button padding */
+  border-radius: 40px;
+  cursor: pointer;
+}
+
+/* Style for when button is hovered */
+.file-input-label:hover {
+  background-color: #0056b3; /* Hovered button background color */
+}
+
+
+/* Add more styles as needed */
+
+.banner {
+  position: relative;
+  width: 100%;
+  height: 200px; /* Adjust height as needed */
+  background-image: url('https://agarolifestyle.com/cdn/shop/files/productrbanner.png?v=1707378882');
+  background-size: cover;
+  background-position: center;
+  text-align: center;
+  padding-left: 0; /* Remove left padding */
+  padding-right: 0; /* Remove right padding */
+  margin-left: auto; /* Align to the left */
+  margin-right: auto; /* Align to the right */
+}
+
+
+.banner-link {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  color: white;
+  font-size: 20px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+
+.banner-link:hover, .banner-link:active, .banner-link:focus {
+  color: white; /* Prevent default blue color */
+  text-decoration: none; /* Remove underline */
+}
+.mt-3 {
+  margin-top:0 !important;
+}
+.container, .container-fluid, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+  --bs-gutter-x: 1.5rem;
+  --bs-gutter-y: 0;
+  width: 100%;
+  padding-right: 0; 
+  padding-left: 0; 
+  margin-right: auto;
+  margin-left: auto;
 }

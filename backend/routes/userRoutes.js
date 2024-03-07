@@ -4,6 +4,9 @@ import expressAsyncHandler from 'express-async-handler';
 import jwt from 'jsonwebtoken';
 import User from '../models/userModel.js';
 import { isAuth, isAdmin, generateToken, baseUrl, mailgun } from '../utils.js';
+import nodemailer from 'nodemailer';
+
+
 
 const userRouter = express.Router();
 
@@ -57,6 +60,8 @@ userRouter.put(
   })
 );
 
+
+
 userRouter.post(
   '/forget-password',
   expressAsyncHandler(async (req, res) => {
@@ -69,27 +74,36 @@ userRouter.post(
       user.resetToken = token;
       await user.save();
 
-      //reset link
-      console.log(`${baseUrl()}/reset-password/${token}`);
+      // Create Nodemailer transporter
+      let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.EMAIL_USERNAME,
+          pass: process.env.APPLICATION_SPECIFIC_PASSWORD,
+        },
+      });
 
-      mailgun()
-        .messages()
-        .send(
-          {
-            from: 'Amazona <me@mg.yourdomain.com>',
-            to: `${user.name} <${user.email}>`,
-            subject: `Reset Password`,
-            html: ` 
-             <p>Please Click the following link to reset your password:</p> 
-             <a href="${baseUrl()}/reset-password/${token}"}>Reset Password</a>
-             `,
-          },
-          (error, body) => {
-            console.log(error);
-            console.log(body);
-          }
-        );
-      res.send({ message: 'We sent reset password link to your email.' });
+      // Email content
+      let mailOptions = {
+        from: 'TriSpear <pratikpark439@gmail.com>',
+        to: `${user.name} <${user.email}>`,
+        subject: `Reset Password`,
+        html: ` 
+          <p>Please Click the following link to reset your password:</p> 
+          <a href="${baseUrl()}/reset-password/${token}"}>Reset Password</a>
+        `,
+      };
+
+      // Send email
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log('Error:', error);
+          res.status(500).send({ message: 'Internal Server Error' });
+        } else {
+          console.log('Email sent:', info.response);
+          res.send({ message: 'We sent reset password link to your email.' });
+        }
+      });
     } else {
       res.status(404).send({ message: 'User not found' });
     }

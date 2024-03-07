@@ -4,6 +4,9 @@ import Order from '../models/orderModel.js';
 import User from '../models/userModel.js';
 import Product from '../models/productModel.js';
 import { isAuth, isAdmin, mailgun, payOrderEmailTemplate } from '../utils.js';
+import mongoose from 'mongoose';
+
+
 
 const orderRouter = express.Router();
 
@@ -94,14 +97,25 @@ orderRouter.get(
   '/:id',
   isAuth,
   expressAsyncHandler(async (req, res) => {
-    const order = await Order.findById(req.params.id);
-    if (order) {
-      res.send(order);
-    } else {
-      res.status(404).send({ message: 'Order Not Found' });
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      res.status(400).send({ message: 'Invalid Order ID' });
+      return;
+    }
+
+    try {
+      const order = await Order.findById(id);
+      if (order) {
+        res.send(order);
+      } else {
+        res.status(404).send({ message: 'Order Not Found' });
+      }
+    } catch (error) {
+      res.status(500).send({ message: 'Internal Server Error' });
     }
   })
 );
+
 
 orderRouter.put(
   '/:id/deliver',

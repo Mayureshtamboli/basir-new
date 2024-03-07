@@ -36,8 +36,14 @@ import UserEditScreen from './screens/UserEditScreen';
 import MapScreen from './screens/MapScreen';
 import ForgetPasswordScreen from './screens/ForgetPasswordScreen';
 import ResetPasswordScreen from './screens/ResetPasswordScreen';
+import AboutScreen from './screens/AboutScreen';
+import Services from './screens/Services';
+import ProductRegistrationForm from './components/ProductForm';
 
-function App() {
+
+
+
+import { MdAccountCircle, } from 'react-icons/md';function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { fullBox, cart, userInfo } = state;
 
@@ -77,19 +83,26 @@ function App() {
       >
         <ToastContainer position="bottom-center" limit={1} />
         <header>
-          <Navbar bg="dark" variant="dark" expand="lg">
+          <Navbar bg="white" variant="black" expand="lg">
             <Container>
-              <Button
-                variant="dark"
-                onClick={() => setSidebarIsOpen(!sidebarIsOpen)}
-              >
-                <i className="fas fa-bars"></i>
-              </Button>
+            <Button
+  variant="black"
+  bg="white"
+  onClick={() => setSidebarIsOpen(!sidebarIsOpen)}
+  style={{ backgroundColor: 'white', color: 'black' }} // Set background color to white and text color to black
+>
+  <i className="fas fa-bars"></i>
+</Button>
+
+
 
               <LinkContainer to="/">
-                <Navbar.Brand>amazona</Navbar.Brand>
+                <Navbar.Brand>TriSpear</Navbar.Brand>
               </LinkContainer>
-              <Navbar.Toggle aria-controls="basic-navbar-nav" />
+              
+              <Navbar.Toggle aria-controls="basic-navbar-nav">
+        <MdAccountCircle style={{ color: 'black' }} />
+      </Navbar.Toggle>
               <Navbar.Collapse id="basic-navbar-nav">
                 <SearchBox />
                 <Nav className="me-auto  w-100  justify-content-end">
@@ -101,6 +114,10 @@ function App() {
                       </Badge>
                     )}
                   </Link>
+                  <Link to="/about" className="nav-link">About</Link>
+                  <Link to="/services" className="nav-link">Services</Link>
+                  <Link to="/registration" className="nav-link">Product Registration</Link>
+                  
                   {userInfo ? (
                     <NavDropdown title={userInfo.name} id="basic-nav-dropdown">
                       <LinkContainer to="/profile">
@@ -141,8 +158,11 @@ function App() {
                   )}
                 </Nav>
               </Navbar.Collapse>
+              
             </Container>
+            
           </Navbar>
+          
         </header>
         <div
           className={
@@ -182,6 +202,18 @@ function App() {
               <Route
                 path="/reset-password/:token"
                 element={<ResetPasswordScreen />}
+              />
+              <Route
+                 path="/about"
+                 element={<AboutScreen />}
+              />
+              <Route
+                 path="/registration"
+                 element={<ProductRegistrationForm />}
+              />
+              <Route
+                 path="/services"
+                 element={<Services />}
               />
 
               <Route
@@ -263,6 +295,8 @@ function App() {
                   </AdminRoute>
                 }
               ></Route>
+              
+          
               <Route
                 path="/admin/user/:id"
                 element={
